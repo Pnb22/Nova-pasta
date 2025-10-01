@@ -1,0 +1,56 @@
+// Substitua pelo seu endpoint da API do CrudCrud
+const API_URL = 'https://crudcrud.com/api/SEU_ENDPOINT_AQUI/clientes';
+
+const form = document.getElementById('clienteForm');
+const nomeInput = document.getElementById('nome');
+const emailInput = document.getElementById('email');
+const clientesList = document.getElementById('clientesList');
+
+function listarClientes() {
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(clientes => {
+            clientesList.innerHTML = '';
+            clientes.forEach(cliente => {
+                const li = document.createElement('li');
+                li.textContent = `${cliente.nome} - ${cliente.email} `;
+
+                const delBtn = document.createElement('button');
+                delBtn.textContent = 'Excluir';
+                delBtn.onclick = () => excluirCliente(cliente._id);
+
+                li.appendChild(delBtn);
+                clientesList.appendChild(li);
+            });
+        })
+        .catch(error => console.log(error));
+}
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const novoCliente = {
+        nome: nomeInput.value,
+        email: emailInput.value
+    };
+
+    fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoCliente)
+    })
+    .then(() => {
+        nomeInput.value = '';
+        emailInput.value = '';
+        listarClientes();
+    })
+    .catch(error => console.log(error));
+});
+
+function excluirCliente(id) {
+    fetch(`${API_URL}/${id}`, { method: 'DELETE' })
+        .then(() => listarClientes())
+        .catch(error => console.log(error));
+}
+
+// Carregar clientes ao iniciar
+listarClientes();
