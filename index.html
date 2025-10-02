@@ -6,15 +6,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Clientes</h1>
-    <form id="clienteForm">
-        <input type="text" id="nome" placeholder="Nome" required>
-        <input type="email" id="email" placeholder="E-mail" required>
-        <button type="submit">Cadastrar</button>
-    </form>
-
-    <ul id="clientesList"></ul>
-
+    <main>
+        <h1>Clientes</h1>
+        <form id="clienteForm" aria-label="Cadastro de Clientes">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" placeholder="Nome" required>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" placeholder="E-mail" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <div id="feedback" aria-live="polite"></div>
+        <section>
+            <ul id="clientesList"></ul>
+        </section>
+    </main>
     <script src="scripts.js"></script>
 </body>
 </html>
