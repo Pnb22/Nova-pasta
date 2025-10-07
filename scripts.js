@@ -1,4 +1,4 @@
-const API_URL = "https://crudcrud.com/api/6f4d8b94fa1c49a1b056aa408205ee42";
+const API_URL = "https://crudcrud.com/api/6f4d8b94fa1c49a1b056aa408205ee42/clientes";
 
 // Seletores
 const clienteForm = document.getElementById("clienteForm");
