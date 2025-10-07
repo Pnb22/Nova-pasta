@@ -1,56 +1,70 @@
-// Substitua pelo seu endpoint da API do CrudCrud
-const API_URL = 'https://crudcrud.com/api/4167613d03d5466eb2b7ca6a5c63a89c';
+const API_URL = "https://crudcrud.com/api/6f4d8b94fa1c49a1b056aa408205ee42/clientes";
 
-const form = document.getElementById('clienteForm');
-const nomeInput = document.getElementById('nome');
-const emailInput = document.getElementById('email');
-const clientesList = document.getElementById('clientesList');
+// Seletores
+const clienteForm = document.getElementById("clienteForm");
+const clientesList = document.getElementById("clientesList");
 
-function listarClientes() {
-    fetch(API_URL)
-        .then(response => response.json())
-        .then(clientes => {
-            clientesList.innerHTML = '';
-            clientes.forEach(cliente => {
-                const li = document.createElement('li');
-                li.textContent = `${cliente.nome} - ${cliente.email} `;
+// Função para listar clientes
+async function listarClientes() {
+  try {
+    const response = await fetch(API_URL);
+    const clientes = await response.json();
 
-                const delBtn = document.createElement('button');
-                delBtn.textContent = 'Excluir';
-                delBtn.onclick = () => excluirCliente(cliente._id);
+    clientesList.innerHTML = "";
+    clientes.forEach(cliente => {
+      const li = document.createElement("li");
+      li.textContent = `${cliente.nome} - ${cliente.email}`;
 
-                li.appendChild(delBtn);
-                clientesList.appendChild(li);
-            });
-        })
-        .catch(error => console.log(error));
+      const btnDelete = document.createElement("button");
+      btnDelete.textContent = "Excluir";
+      btnDelete.addEventListener("click", () => excluirCliente(cliente._id));
+
+      li.appendChild(btnDelete);
+      clientesList.appendChild(li);
+    });
+  } catch (error) {
+    console.error("Erro ao listar clientes:", error);
+  }
 }
 
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const novoCliente = {
-        nome: nomeInput.value,
-        email: emailInput.value
-    };
+// Função para cadastrar cliente
+clienteForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(novoCliente)
-    })
-    .then(() => {
-        nomeInput.value = '';
-        emailInput.value = '';
-        listarClientes();
-    })
-    .catch(error => console.log(error));
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email }),
+    });
+
+    if (response.ok) {
+      clienteForm.reset();
+      listarClientes(); // Atualiza a lista
+    } else {
+      console.error("Erro ao cadastrar cliente");
+    }
+  } catch (error) {
+    console.error("Erro de rede ao cadastrar cliente:", error);
+  }
 });
 
-function excluirCliente(id) {
-    fetch(`${API_URL}/${id}`, { method: 'DELETE' })
-        .then(() => listarClientes())
-        .catch(error => console.log(error));
+// Função para excluir cliente
+async function excluirCliente(id) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    if (response.ok) {
+      listarClientes();
+    } else {
+      console.error("Erro ao excluir cliente");
+    }
+  } catch (error) {
+    console.error("Erro de rede ao excluir cliente:", error);
+  }
 }
 
-// Carregar clientes ao iniciar
+// Carregar a lista de clientes ao abrir a página
 listarClientes();
