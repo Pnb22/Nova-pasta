@@ -5,7 +5,7 @@ body {
   color: #333;
 }
 
-h1, h2 {
+h1 {
   color: #444;
 }
 
@@ -52,4 +52,16 @@ li button {
 
 li button:hover {
   background: #a71d2a;
+}
+
+#feedback {
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
 }
